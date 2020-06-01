@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "IGN Enhancer",
+  "version": "1.2",
+  "description": "Addon para turbinar o nosso querido Fórum IGN",
+  "icons": {
+    "48": "logo.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://ignboards.com/*", "*://www.ignboards.com/*"],
+      "js": ["js/browser-polyfill.min.js", "js/jquery-3.4.1.min.js", "js/main.js"]
+    },
+    {
+      "matches": ["*://ignboards.com/forums/*", "*://www.ignboards.com/forums/*"],
+      "js": ["js/browser-polyfill.min.js", "js/jquery-3.4.1.min.js", "js/neverending.js"]
+    }
+  ],
+  "permissions": [
+      "storage",
+      "webRequest",
+      "activeTab",
+      "tabs",
+      "webRequestBlocking",
+      "https://www.ignboards.com/*"
+  ],
+  "web_accessible_resources": ["js/*.js"]
+}
