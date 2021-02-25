@@ -95,6 +95,9 @@ function detectSubmitButton(currentUrl) {
     }
     else if(location == 'threads')    {
         button = allButtons[4]
+        if (button.classList.contains('button--icon--vote')) {
+            button = allButtons[5]
+        }
     }
     else{
         return null
