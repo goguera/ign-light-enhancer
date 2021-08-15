@@ -45,6 +45,7 @@
 
                 // here you get the RESPONSE HEADERS
                 var responseHeaders = this.getAllResponseHeaders();
+                var requestHeaders = this._requestHeaders
 
                 if ( this.responseType != 'blob' && this.responseText) {
                     // responseText is string or null
@@ -52,7 +53,7 @@
 
                         // here you get RESPONSE TEXT (BODY), in JSON format, so you can use JSON.parse
                         var arr = JSON.parse(this.responseText);
-                        sendToContent(arr)
+                        sendToContent({...arr, url: this._url})
                          
                         
                         // printing url, request headers, response headers, response body, to console

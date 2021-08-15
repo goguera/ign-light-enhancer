@@ -37,6 +37,12 @@ function xhrCallback(data){
             }
         })
     }
+    if (data.xhrData.status === "ok" && data.xhrData.url) {
+        const actionName = data.xhrData.url.split('/').pop()
+        if (actionName === 'add-reply') {
+            startAutoCloseTab(data)
+        }
+    }
 }
 
 function subscribeToXhrListener(){
@@ -48,6 +54,61 @@ function subscribeToXhrListener(){
     }, false);
 }
 
+
+// START AUTOCLOSETAB STUFF
+
+var isAutoCloseCanceled = false
+
+const checkIfAutoCloseIsCanceled = () => isAutoCloseCanceled
+
+async function startAutoCloseTab (xhrData) {
+    const shouldCloseTabSettings = await browser.storage.local.get("closeTabOnPost")
+    let shouldCloseTab = shouldCloseTabSettings.closeTabOnPost === "yes"
+    if (shouldCloseTab) {
+       isAutoCloseCanceled = false
+       insertCloseTabWarningButton(xhrData)
+    }
+}
+
+function closeCurrentTab () {
+     browser.runtime.sendMessage({
+        command: "closeCurrentTab",
+      });
+}
+
+const startAutoCloseCountdown = async (time) => {
+    let isCanceled = false
+    while ((time + 1) >= 0){
+        await sleep(1000).then(() => {
+            time--
+            isCanceled = checkIfAutoCloseIsCanceled()     
+        })
+    }
+    if (!isCanceled) {
+        closeCurrentTab()
+    }
+}
+
+
+const cancelAutoClose = () => {
+    removeCloseWarningButton()
+    isAutoCloseCanceled = true
+}
+
+function removeCloseWarningButton () {
+    document.getElementById('closeWarningButton').remove()
+}
+
+async function insertCloseTabWarningButton (xhrData) {
+    const timeToClose = await browser.storage.local.get("timeToClose")
+    let replyButton = detectSubmitButton(xhrData.url)
+    let warningButtonHtml = `<button type='button' id='closeWarningButton'">Fechando aba em ${timeToClose.timeToClose} segundos, clique para cancelar</button>`
+    replyButton.insertAdjacentHTML('beforebegin', warningButtonHtml)
+    document.getElementById("closeWarningButton").addEventListener("click", cancelAutoClose);
+    startAutoCloseCountdown(parseInt(timeToClose.timeToClose))
+}
+
+// END AUTOCLOSETAB
 
 
 // END SUBSCRIBES

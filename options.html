@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+
+  <body style='height: 300px'>
+    <form>
+      <table>
+        <tr>
+          <td>Fechar aba ao enviar um post?</td>
+          <td>
+            <label for="yes"
+              >Sim<input type="radio" id="yes" name="closetab" value="yes"
+            /></label>
+            <label for="no"
+              >Nao<input type="radio" id="no" name="closetab" value="no"
+            /></label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="timelimit"
+              >Tempo em segundos até a aba fechar depois do post ser enviado:
+            </label>
+          </td>
+          <td><input name="timelimit" id="timelimit" /></td>
+        </tr>
+      </table>
+      <button type="submit">SALVAR</button>
+    </form>
+
+    <script src="options.js"></script>
+  </body>
+</html>
